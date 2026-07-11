@@ -1,0 +1,88 @@
+---
+// To set up:
+// 1. Go to behold.so and create a free account
+// 2. Connect your Instagram (@darkstylemedia)
+// 3. Create a new feed widget
+// 4. Copy the Widget ID from the embed code (looks like: ABC12345)
+// 5. Paste it below as BEHOLD_WIDGET_ID
+
+const BEHOLD_WIDGET_ID = 'YOUR_WIDGET_ID';
+---
+
+<section class="instagram">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-label">Instagram</span>
+        <h2 class="section-title">Latest Posts</h2>
+        <div class="divider"></div>
+      </div>
+      <a
+        href="https://instagram.com/darkstylemedia"
+        class="btn btn-ghost ig-follow"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        Follow
+      </a>
+    </div>
+
+    {BEHOLD_WIDGET_ID === 'YOUR_WIDGET_ID' ? (
+      <div class="ig-placeholder">
+        <p>Connect your Instagram — see setup instructions in <code>src/components/InstagramFeed.astro</code></p>
+      </div>
+    ) : (
+      <div class="ig-feed-wrap">
+        <div id={`behold-widget-${BEHOLD_WIDGET_ID}`}></div>
+        <script src="https://w.behold.so/widget.js" type="module"></script>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .instagram {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+
+  .ig-follow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Placeholder shown before widget ID is set */
+  .ig-placeholder {
+    border: 1px dashed var(--border);
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  .ig-placeholder code {
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+
+  /* Override Behold widget styles to match dark theme */
+  .ig-feed-wrap {
+    --behold-background-color: var(--bg);
+    --behold-gap: 6px;
+  }
+</style>
