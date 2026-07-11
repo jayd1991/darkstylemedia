@@ -6,7 +6,7 @@
 // 4. Copy the Widget ID from the embed code (looks like: ABC12345)
 // 5. Paste it below as BEHOLD_WIDGET_ID
 
-const BEHOLD_WIDGET_ID = '3t8lH';
+const BEHOLD_FEED_ID = 'fZr1a0hmxlAPhOjVBtJ0';
 ---
 
 <section class="instagram">
@@ -32,16 +32,17 @@ const BEHOLD_WIDGET_ID = '3t8lH';
       </a>
     </div>
 
-    {BEHOLD_WIDGET_ID === 'YOUR_WIDGET_ID' ? (
-      <div class="ig-placeholder">
-        <p>Connect your Instagram — see setup instructions in <code>src/components/InstagramFeed.astro</code></p>
-      </div>
-    ) : (
-      <div class="ig-feed-wrap">
-        <div id={`behold-widget-${BEHOLD_WIDGET_ID}`}></div>
-        <script src="https://w.behold.so/widget.js" type="module"></script>
-      </div>
-    )}
+    <div class="ig-feed-wrap">
+      <behold-widget feed-id={BEHOLD_FEED_ID}></behold-widget>
+      <script>
+        (() => {
+          const d = document, s = d.createElement('script');
+          s.type = 'module';
+          s.src = 'https://w.behold.so/widget.js';
+          d.head.append(s);
+        })();
+      </script>
+    </div>
   </div>
 </section>
 
