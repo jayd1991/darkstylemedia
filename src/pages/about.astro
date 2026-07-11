@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AboutSection from '../components/AboutSection.astro';
+---
+
+<Layout title="About" description="The story behind Darkstylemedia — professional photographer and videographer.">
+
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">About</span>
+      <h1 class="page-title">The Story</h1>
+    </div>
+  </div>
+
+  <AboutSection />
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: calc(var(--nav-height) + 4rem) 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    margin-top: 0.5rem;
+  }
+</style>

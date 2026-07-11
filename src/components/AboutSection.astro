@@ -1,0 +1,184 @@
+---
+import site from '../data/site.json';
+
+interface Props {
+  short?: boolean;
+}
+const { short = false } = Astro.props;
+---
+
+<section class="about">
+  <div class="container">
+    <div class="about-grid">
+
+      <div class="about-visual">
+        <div class="about-img-wrap">
+          <!--
+            Add your photo: place it at public/images/profile.jpg
+            Then replace the placeholder div below with:
+            <img src="/images/profile.jpg" alt="Darkstylemedia" class="about-img" />
+          -->
+          <div class="about-img-placeholder">
+            <span>Add your photo<br/>public/images/profile.jpg</span>
+          </div>
+          <div class="corner-accent"></div>
+        </div>
+
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">{site.about.experience}</span>
+            <span class="stat-label">Years<br/>Experience</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">{site.about.projects}</span>
+            <span class="stat-label">Projects<br/>Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-body">
+        <span class="section-label">About</span>
+        <h2 class="section-title">
+          The Eye<br/>Behind the<br/><span class="accent-text">Lens</span>
+        </h2>
+        <div class="divider"></div>
+        <p class="about-bio">{site.about.bio}</p>
+        {!short && <p class="about-bio">{site.about.bio2}</p>}
+        <div class="about-actions">
+          <a href="/work" class="btn btn-primary">View Work</a>
+          {short
+            ? <a href="/about" class="btn btn-ghost">Learn More</a>
+            : <a href="/contact" class="btn btn-ghost">Work Together</a>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  /* Visual column */
+  .about-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .about-img-wrap {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    max-width: 380px;
+  }
+
+  .about-img-placeholder {
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+  }
+
+  .about-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .corner-accent {
+    position: absolute;
+    bottom: -14px;
+    right: -14px;
+    width: 55%;
+    height: 55%;
+    border: 1px solid var(--accent);
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  .about-stats {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+  }
+
+  .stat-num {
+    display: block;
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: 3rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    line-height: 1.5;
+  }
+
+  /* Body column */
+  .about-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-bio {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.95;
+    margin-bottom: 1.25rem;
+  }
+
+  .about-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .accent-text { color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .about-img-wrap {
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

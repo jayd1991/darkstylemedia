@@ -1,0 +1,124 @@
+---
+import site from '../data/site.json';
+
+const year = new Date().getFullYear();
+const links = [
+  { href: '/work',    label: 'Work' },
+  { href: '/about',   label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+
+    <div class="footer-top">
+      <a href="/" class="footer-logo">
+        DARK<span class="accent">STYLE</span><span class="dim">MEDIA</span>
+      </a>
+
+      <nav class="footer-nav" aria-label="Footer navigation">
+        {links.map(link => (
+          <a href={link.href} class="footer-link">{link.label}</a>
+        ))}
+      </nav>
+
+      <div class="footer-socials">
+        {site.social.instagram && (
+          <a href={site.social.instagram} class="social-tag" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        )}
+        {site.social.youtube && (
+          <a href={site.social.youtube} class="social-tag" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+        )}
+        {site.social.vimeo && (
+          <a href={site.social.vimeo} class="social-tag" target="_blank" rel="noopener" aria-label="Vimeo">VM</a>
+        )}
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; {year} Darkstylemedia. All rights reserved.</p>
+      <a href={`mailto:${site.email}`} class="footer-email">{site.email}</a>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 0 2rem;
+  }
+
+  .footer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
+  .accent { color: var(--accent); }
+  .dim    { color: var(--text-muted); }
+
+  .footer-nav {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-link {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--text); }
+
+  .footer-socials {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .social-tag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.38rem 0.7rem;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .social-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-copy,
+  .footer-email {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  .footer-email { transition: color 0.2s; }
+  .footer-email:hover { color: var(--text-muted); }
+</style>

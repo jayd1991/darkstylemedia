@@ -1,0 +1,50 @@
+---
+import ProjectGrid from './ProjectGrid.astro';
+---
+
+<section class="featured">
+  <div class="container">
+    <div class="featured-header">
+      <div>
+        <span class="section-label">Selected Work</span>
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="divider"></div>
+      </div>
+      <a href="/work" class="btn btn-ghost hide-mobile">View All</a>
+    </div>
+
+    <ProjectGrid featured={true} />
+
+    <div class="featured-footer">
+      <a href="/work" class="btn btn-outline">View All Work</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .featured-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+
+  .featured-footer {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .hide-mobile {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    .hide-mobile { display: inline-block; }
+    .featured-footer { display: none; }
+  }
+</style>

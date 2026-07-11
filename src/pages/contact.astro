@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContactSection from '../components/ContactSection.astro';
+---
+
+<Layout title="Contact" description="Get in touch with Darkstylemedia for photography and videography bookings.">
+
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">Get In Touch</span>
+      <h1 class="page-title">Contact</h1>
+    </div>
+  </div>
+
+  <ContactSection />
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: calc(var(--nav-height) + 4rem) 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    margin-top: 0.5rem;
+  }
+</style>

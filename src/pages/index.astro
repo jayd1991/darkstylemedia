@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedWork from '../components/FeaturedWork.astro';
+import AboutSection from '../components/AboutSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+import site from '../data/site.json';
+---
+
+<Layout title="Darkstylemedia" description={site.description}>
+  <Hero />
+  <FeaturedWork />
+  <AboutSection short={true} />
+  <ContactSection compact={true} />
+</Layout>

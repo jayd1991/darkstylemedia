@@ -1,0 +1,265 @@
+---
+import site from '../data/site.json';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<section class="contact-section">
+  <div class="container">
+
+    {compact ? (
+      <div class="contact-cta">
+        <span class="section-label">Ready to Work Together?</span>
+        <h2 class="cta-heading">Let's Create<br/><span class="accent-text">Something Great</span></h2>
+        <a href="/contact" class="btn btn-primary cta-btn">Get In Touch</a>
+      </div>
+    ) : (
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <span class="section-label">Contact</span>
+          <h2 class="section-title">
+            Let's Create<br/>Something<br/><span class="accent-text">Unforgettable</span>
+          </h2>
+          <div class="divider"></div>
+          <p class="section-desc">
+            Available for photography sessions, videography projects, commercial campaigns, and creative collaborations.
+          </p>
+
+          <div class="contact-details">
+            <a href={`mailto:${site.email}`} class="contact-item">
+              <span class="item-label">Email</span>
+              <span class="item-value">{site.email}</span>
+            </a>
+            {site.phone && (
+              <div class="contact-item">
+                <span class="item-label">Phone</span>
+                <span class="item-value">{site.phone}</span>
+              </div>
+            )}
+            {site.location && (
+              <div class="contact-item">
+                <span class="item-label">Based in</span>
+                <span class="item-value">{site.location}</span>
+              </div>
+            )}
+          </div>
+
+          <div class="social-row">
+            {site.social.instagram && (
+              <a href={site.social.instagram} class="social-btn" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <rect x="2" y="2" width="20" height="20" rx="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+                Instagram
+              </a>
+            )}
+            {site.social.youtube && (
+              <a href={site.social.youtube} class="social-btn" target="_blank" rel="noopener" aria-label="YouTube">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                YouTube
+              </a>
+            )}
+            {site.social.vimeo && (
+              <a href={site.social.vimeo} class="social-btn" target="_blank" rel="noopener" aria-label="Vimeo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197c1.185-1.044 2.351-2.084 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.48 4.807z"/>
+                </svg>
+                Vimeo
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div class="form-wrap">
+          <form id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required placeholder="Your name" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="your@email.com" />
+            </div>
+            <div class="form-group">
+              <label for="service">Service</label>
+              <select id="service" name="service">
+                <option value="">Select a service…</option>
+                <option value="photography">Photography</option>
+                <option value="videography">Videography</option>
+                <option value="both">Photography + Videography</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project…"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary submit-btn">Send Message</button>
+          </form>
+        </div>
+
+      </div>
+    )}
+
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Compact CTA (homepage) */
+  .contact-cta {
+    text-align: center;
+    padding: 4rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-heading {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    margin-bottom: 2rem;
+  }
+
+  .cta-btn { margin-top: 0; }
+
+  /* Full layout */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-details {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    color: inherit;
+    transition: color 0.2s;
+  }
+  a.contact-item:hover { color: var(--accent); }
+
+  .item-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .item-value { font-size: 0.95rem; }
+
+  .social-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .social-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Form */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  input, select, textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 300;
+    width: 100%;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--text-dim); }
+  input:focus, select:focus, textarea:focus  { border-color: var(--accent); }
+
+  .submit-btn { width: 100%; }
+
+  .accent-text { color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contactForm') as HTMLFormElement | null;
+
+  form?.addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = form.querySelector<HTMLButtonElement>('.submit-btn')!;
+    btn.textContent = 'Message Sent!';
+    btn.style.background = '#27ae60';
+    btn.disabled = true;
+    setTimeout(() => {
+      form.reset();
+      btn.textContent = 'Send Message';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 4000);
+  });
+</script>

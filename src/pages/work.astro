@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+---
+
+<Layout title="Work" description="Photography and videography portfolio by Darkstylemedia.">
+
+  <div class="page-header">
+    <div class="container">
+      <span class="section-label">Portfolio</span>
+      <h1 class="page-title">Work</h1>
+      <p class="page-desc">Photography and videography projects — filter by category below.</p>
+    </div>
+  </div>
+
+  <section class="work-body">
+    <div class="container">
+      <ProjectGrid />
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: calc(var(--nav-height) + 4rem) 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    margin: 0.5rem 0 0.75rem;
+  }
+
+  .page-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .work-body {
+    padding: 4rem 0 7rem;
+  }
+</style>

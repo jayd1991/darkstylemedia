@@ -1,0 +1,88 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import projects from '../data/projects.json';
+
+interface Props {
+  featured?: boolean;
+  limit?: number;
+}
+
+const { featured = false, limit } = Astro.props;
+
+let list = featured ? projects.filter(p => p.featured) : [...projects];
+if (limit) list = list.slice(0, limit);
+---
+
+<div class="grid-wrapper">
+  {!featured && (
+    <div class="filter-bar" role="tablist" aria-label="Filter projects">
+      <button class="filter-btn active" data-filter="all" role="tab">All</button>
+      <button class="filter-btn" data-filter="photography" role="tab">Photography</button>
+      <button class="filter-btn" data-filter="videography" role="tab">Videography</button>
+    </div>
+  )}
+
+  <div class="grid" id="projectGrid">
+    {list.map(project => (
+      <ProjectCard project={project} />
+    ))}
+  </div>
+</div>
+
+<style>
+  .filter-bar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 0.65rem 1.35rem;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .filter-btn:hover { color: var(--text); }
+
+  .filter-btn.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const btns  = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards = document.querySelectorAll<HTMLElement>('#projectGrid [data-category]');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>

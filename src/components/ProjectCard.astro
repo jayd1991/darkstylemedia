@@ -1,0 +1,162 @@
+---
+interface Props {
+  project: {
+    id: number;
+    title: string;
+    category: string;
+    description: string;
+    image: string;
+    gradient: string;
+    videoUrl?: string;
+    featured?: boolean;
+  };
+}
+
+const { project } = Astro.props;
+const isVideo = project.category === 'videography';
+---
+
+<article class="card" data-category={project.category}>
+  <div class="card-media">
+    <!-- Gradient shown while image loads or if no image is added yet -->
+    <div class="card-bg" style={`background: ${project.gradient}`}></div>
+    <img
+      src={project.image}
+      alt={project.title}
+      class="card-img"
+      loading="lazy"
+      onerror="this.style.opacity='0'"
+    />
+
+    <div class="card-overlay">
+      <p class="card-desc">{project.description}</p>
+      {isVideo && project.videoUrl && (
+        <a href={project.videoUrl} class="card-play-btn" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          Watch
+        </a>
+      )}
+    </div>
+
+    {isVideo && (
+      <span class="card-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z"/>
+        </svg>
+        Video
+      </span>
+    )}
+  </div>
+
+  <div class="card-info">
+    <span class="card-cat">{project.category}</span>
+    <h3 class="card-title">{project.title}</h3>
+  </div>
+</article>
+
+<style>
+  .card { cursor: default; }
+
+  .card-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .card-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease, opacity 0.4s;
+  }
+
+  .card:hover .card-img { transform: scale(1.06); }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 55%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    gap: 0.85rem;
+  }
+
+  .card:hover .card-overlay { opacity: 1; }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.84);
+    line-height: 1.55;
+    transform: translateY(6px);
+    transition: transform 0.35s ease;
+  }
+
+  .card:hover .card-desc { transform: translateY(0); }
+
+  .card-play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 0.45rem 1rem;
+    width: fit-content;
+    transition: background 0.2s;
+  }
+
+  .card-play-btn:hover { background: var(--accent-hover); }
+
+  .card-badge {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.88);
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    padding: 0.28rem 0.6rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .card-info { padding: 0.9rem 0 0; }
+
+  .card-cat {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: 1.45rem;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    margin-top: 0.2rem;
+  }
+</style>
