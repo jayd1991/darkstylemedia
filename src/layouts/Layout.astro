@@ -51,7 +51,10 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
       <div class="vm-backdrop"></div>
       <div class="vm-box">
         <button class="vm-close" aria-label="Close">&times;</button>
-        <video class="vm-video" controls playsinline></video>
+        <div class="vm-player">
+          <video class="vm-video" controls playsinline></video>
+          <span class="vm-watermark">© DARKSTYLEMEDIA</span>
+        </div>
       </div>
     </div>
 
@@ -101,6 +104,11 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
       }
       .vm-close:hover { border-color: #fff; color: #fff; }
 
+      .vm-player {
+        position: relative;
+        line-height: 0;
+      }
+
       .vm-video {
         display: block;
         max-width: 92vw;
@@ -109,6 +117,21 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
         height: auto;
         background: #000;
         outline: none;
+      }
+
+      .vm-watermark {
+        position: absolute;
+        bottom: 3rem; /* above the video controls bar */
+        right: 0.9rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.6rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        user-select: none;
       }
     </style>
 
