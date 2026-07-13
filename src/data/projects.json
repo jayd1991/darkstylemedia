@@ -38,7 +38,9 @@
       "/images/IMG_1078_edited.webp",
       "/images/IMG_1083_edited.webp",
       "/images/IMG_1085_edited.webp",
-      "/images/1.webp"
+      "/images/1_3.webp",
+      "/images/IMG_1072_edited.webp",
+      "/images/IMG_1069_edited.webp"
     ],
     "loop": false,
     "title": "Squire's Motorbike Cafe",
@@ -50,9 +52,9 @@
     "featured": false,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
     "id": 13,
-    "image": "/images/1_2.webp",
+    "image": "/images/power.webp",
     "images": [
-      "/images/1_2.webp"
+      "/images/power.webp"
     ],
     "loop": false,
     "title": "Power",
