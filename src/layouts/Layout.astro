@@ -45,5 +45,106 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
       <slot />
     </main>
     <Footer />
+
+    <!-- Video lightbox -->
+    <div id="video-modal" aria-modal="true" role="dialog" aria-label="Video player">
+      <div class="vm-backdrop"></div>
+      <div class="vm-box">
+        <button class="vm-close" aria-label="Close">&times;</button>
+        <video class="vm-video" controls playsinline></video>
+      </div>
+    </div>
+
+    <style>
+      #video-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        align-items: center;
+        justify-content: center;
+      }
+      #video-modal.open { display: flex; }
+
+      .vm-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.93);
+        cursor: pointer;
+      }
+
+      .vm-box {
+        position: relative;
+        z-index: 1;
+        max-width: 92vw;
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.6rem;
+      }
+
+      .vm-close {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.7);
+        font-size: 1.4rem;
+        line-height: 1;
+        width: 2.2rem;
+        height: 2.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, color 0.2s;
+        flex-shrink: 0;
+      }
+      .vm-close:hover { border-color: #fff; color: #fff; }
+
+      .vm-video {
+        display: block;
+        max-width: 92vw;
+        max-height: calc(88vh - 3rem);
+        width: auto;
+        height: auto;
+        background: #000;
+        outline: none;
+      }
+    </style>
+
+    <script>
+      const modal   = document.getElementById('video-modal')!;
+      const video   = modal.querySelector('.vm-video') as HTMLVideoElement;
+      const backdrop = modal.querySelector('.vm-backdrop')!;
+      const closeBtn = modal.querySelector('.vm-close')!;
+
+      function openModal(url: string) {
+        video.src = url;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        video.play().catch(() => {});
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+        video.pause();
+        video.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.addEventListener('click', (e) => {
+        const btn = (e.target as Element).closest('[data-video]') as HTMLElement | null;
+        if (btn?.dataset.video) {
+          e.preventDefault();
+          openModal(btn.dataset.video);
+        }
+      });
+
+      backdrop.addEventListener('click', closeModal);
+      closeBtn.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+    </script>
   </body>
 </html>
