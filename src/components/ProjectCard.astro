@@ -6,6 +6,7 @@ interface Props {
     category: string;
     description: string;
     image: string;
+    images?: string[];
     gradient: string;
     videoUrl?: string;
     loop?: boolean;
@@ -14,14 +15,25 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const isVideo     = project.category === 'videography';
-const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
+const isVideo = project.category === 'videography';
+const loopSrc = project.loop && project.videoUrl ? project.videoUrl : null;
+
+// Build the effective image list for cycling
+const cycleImages: string[] =
+  project.images && project.images.length > 0
+    ? project.images
+    : project.image
+      ? [project.image]
+      : [];
+const firstImage = cycleImages[0] ?? null;
+const hasCycle   = cycleImages.length > 1;
 ---
 
 <article class="card" data-category={project.category}>
   <div class="card-media">
-    <!-- Gradient shown while image loads or if no image is added yet -->
+    <!-- Gradient shown while image loads or if no image is set -->
     <div class="card-bg" style={`background: ${project.gradient}`}></div>
+
     {loopSrc ? (
       <video
         class="card-video"
@@ -36,12 +48,13 @@ const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
       >
         <source src={loopSrc} />
       </video>
-    ) : project.image ? (
+    ) : firstImage ? (
       <img
-        src={project.image}
+        src={firstImage}
         alt={project.title}
         class="card-img"
         loading="lazy"
+        data-cycle={hasCycle ? JSON.stringify(cycleImages) : undefined}
         onload="this.style.opacity='1'"
         onerror="this.style.opacity='0'"
       />
@@ -74,6 +87,32 @@ const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
     <h3 class="card-title">{project.title}</h3>
   </div>
 </article>
+
+<script>
+  // Image cycling for photography cards with multiple images
+  document.querySelectorAll<HTMLImageElement>('img[data-cycle]').forEach(img => {
+    const srcs: string[] = JSON.parse(img.getAttribute('data-cycle')!);
+
+    // Preload all images so swaps are instant
+    srcs.forEach(src => { const p = new Image(); p.src = src; });
+
+    let idx = 0;
+
+    // Stagger start time per card so they don't all transition at once
+    const delay = Math.random() * 3000;
+
+    setTimeout(() => {
+      setInterval(() => {
+        img.style.opacity = '0';
+        setTimeout(() => {
+          idx = (idx + 1) % srcs.length;
+          img.src = srcs[idx];
+          img.style.opacity = '1';
+        }, 450); // slightly longer than the 0.4s CSS transition
+      }, 4000);
+    }, delay);
+  });
+</script>
 
 <style>
   .card { cursor: default; }
@@ -151,11 +190,6 @@ const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
   }
 
   .card-play-btn:hover { background: var(--accent-hover); }
-
-  .card-badge--loop {
-    background: rgba(192, 57, 43, 0.75);
-    border-color: rgba(192, 57, 43, 0.4);
-  }
 
   .card-badge {
     position: absolute;

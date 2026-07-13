@@ -6,8 +6,34 @@
     "gradient": "linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%)",
     "id": 7.0,
     "image": "",
+    "images": [],
     "loop": true,
     "title": "Peace",
     "videoUrl": "https://pub-b9c57eba192b43de83605dcfd2b449c8.r2.dev/videos/sea.mov"
+  },
+  {
+    "category": "photography",
+    "description": "",
+    "featured": false,
+    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
+    "id": 8,
+    "image": "/images/tree.png",
+    "images": [
+      "/images/tree.png",
+      "/images/tree2.png",
+      "/images/tree3.png",
+      "/images/wall.png",
+      "/images/bird2.png",
+      "/images/brambles.png",
+      "/images/fur.png",
+      "/images/stones.png",
+      "/images/stones2.png",
+      "/images/thorns.png",
+      "/images/thorns2.png",
+      "/images/thorns3.png"
+    ],
+    "loop": false,
+    "title": "Redmires",
+    "videoUrl": ""
   }
 ]
