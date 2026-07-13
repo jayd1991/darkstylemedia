@@ -1,9 +1,9 @@
 {
-  "hero": true,
-  "featuredWork": true,
-  "clients": false,
-  "instagram": false,
-  "blog": true,
   "about": true,
-  "contact": true
+  "blog": true,
+  "clients": false,
+  "contact": true,
+  "featuredWork": true,
+  "hero": true,
+  "instagram": false
 }
