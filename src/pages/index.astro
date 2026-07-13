@@ -4,14 +4,15 @@ import Hero from '../components/Hero.astro';
 import FeaturedWork from '../components/FeaturedWork.astro';
 import AboutSection from '../components/AboutSection.astro';
 import ContactSection from '../components/ContactSection.astro';
-
+import InstagramFeed from '../components/InstagramFeed.astro';
 import site from '../data/site.json';
+import sections from '../data/sections.json';
 ---
 
 <Layout title="Darkstylemedia" description={site.description}>
-  <Hero />
-  <FeaturedWork />
-
-  <AboutSection short={true} />
-  <ContactSection compact={true} />
+  {sections.hero         && <Hero />}
+  {sections.featuredWork && <FeaturedWork />}
+  {sections.instagram    && <InstagramFeed />}
+  {sections.about        && <AboutSection short={true} />}
+  {sections.contact      && <ContactSection compact={true} />}
 </Layout>
