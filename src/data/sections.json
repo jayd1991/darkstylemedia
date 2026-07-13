@@ -1,6 +1,7 @@
 {
   "hero": true,
   "featuredWork": true,
+  "clients": false,
   "instagram": false,
   "about": true,
   "contact": true
