@@ -4,7 +4,7 @@
     "description": "",
     "featured": true,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 12,
+    "id": 12.0,
     "image": "/images/IMG_0971.webp",
     "images": [
       "/images/IMG_0971.webp",
@@ -17,7 +17,7 @@
   {
     "category": "videography",
     "description": "",
-    "featured": false,
+    "featured": true,
     "gradient": "linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%)",
     "id": 7.0,
     "image": "",
@@ -29,9 +29,9 @@
   {
     "category": "photography",
     "description": "",
-    "featured": false,
+    "featured": true,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 10,
+    "id": 10.0,
     "image": "/images/IMG_1065_edited.webp",
     "images": [
       "/images/IMG_1065_edited.webp",
@@ -42,6 +42,20 @@
     ],
     "loop": false,
     "title": "Squire's Motorbike Cafe",
+    "videoUrl": ""
+  },
+  {
+    "category": "photography",
+    "description": "Description.",
+    "featured": false,
+    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
+    "id": 13,
+    "image": "/images/1_2.webp",
+    "images": [
+      "/images/1_2.webp"
+    ],
+    "loop": false,
+    "title": "Power",
     "videoUrl": ""
   },
   {
@@ -74,21 +88,7 @@
     "description": "",
     "featured": false,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 9,
-    "image": "/images/1.webp",
-    "images": [
-      "/images/1.webp"
-    ],
-    "loop": false,
-    "title": "POWER",
-    "videoUrl": ""
-  },
-  {
-    "category": "photography",
-    "description": "",
-    "featured": false,
-    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 11,
+    "id": 11.0,
     "image": "/images/IMG_0952_01.webp",
     "images": [
       "/images/IMG_0952_01.webp",
