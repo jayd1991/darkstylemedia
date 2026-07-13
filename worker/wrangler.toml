@@ -1,0 +1,8 @@
+name = "darkstylemedia-media"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+# Bind to your R2 bucket — "BUCKET" is the name used in the Worker code
+[[r2_buckets]]
+binding    = "BUCKET"
+bucket_name = "video"

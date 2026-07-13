@@ -160,6 +160,7 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
         const btn = (e.target as Element).closest('[data-video]') as HTMLElement | null;
         if (btn?.dataset.video) {
           e.preventDefault();
+          video.loop = btn.dataset.loop === 'true';
           openModal(btn.dataset.video);
         }
       });

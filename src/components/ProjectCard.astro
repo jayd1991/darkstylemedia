@@ -29,27 +29,28 @@ const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
         muted
         loop
         playsinline
-        poster={project.image}
+        poster={project.image || undefined}
         controlsList="nodownload"
         disablePictureInPicture
         oncontextmenu="return false"
       >
         <source src={loopSrc} />
       </video>
-    ) : (
+    ) : project.image ? (
       <img
         src={project.image}
         alt={project.title}
         class="card-img"
         loading="lazy"
+        onload="this.style.opacity='1'"
         onerror="this.style.opacity='0'"
       />
-    )}
+    ) : null}
 
     <div class="card-overlay">
       <p class="card-desc">{project.description}</p>
       {isVideo && project.videoUrl && (
-        <button class="card-play-btn" data-video={project.videoUrl} aria-label={`Watch ${project.title}`}>
+        <button class="card-play-btn" data-video={project.videoUrl} data-loop={project.loop ? 'true' : undefined} aria-label={`Watch ${project.title}`}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true">
             <path d="M8 5v14l11-7z"/>
           </svg>
@@ -95,6 +96,7 @@ const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0;
     transition: transform 0.6s ease, opacity 0.4s;
   }
 
