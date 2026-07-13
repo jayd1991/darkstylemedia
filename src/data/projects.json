@@ -5,6 +5,8 @@
     "category": "photography",
     "description": "A study of light and shadow through city streets at night. Long exposures reveal the hidden rhythm of urban life.",
     "image": "/images/project-1.jpg",
+    "videoUrl": "",
+    "loop": false,
     "featured": true,
     "gradient": "linear-gradient(135deg, #1a0505 0%, #2d1010 40%, #080810 100%)"
   },
@@ -15,6 +17,7 @@
     "description": "Short film capturing a musician's late-night creative process. Grain, shadow, and raw performance.",
     "image": "/images/project-2.jpg",
     "videoUrl": "",
+    "loop": false,
     "featured": true,
     "gradient": "linear-gradient(135deg, #080a1a 0%, #1a0810 40%, #180505 100%)"
   },
@@ -24,6 +27,8 @@
     "category": "photography",
     "description": "Intimate studio portraits exploring identity, stillness, and the quiet power of expression.",
     "image": "/images/project-3.jpg",
+    "videoUrl": "",
+    "loop": false,
     "featured": true,
     "gradient": "linear-gradient(135deg, #0a0a0a 0%, #1c080f 40%, #0a0814 100%)"
   },
@@ -34,6 +39,7 @@
     "description": "Full production commercial campaign for a luxury streetwear brand. Concept to final cut.",
     "image": "/images/project-4.jpg",
     "videoUrl": "",
+    "loop": false,
     "featured": false,
     "gradient": "linear-gradient(135deg, #0f0800 0%, #0a0a0a 40%, #140508 100%)"
   },
@@ -43,6 +49,8 @@
     "category": "photography",
     "description": "Landscape and lifestyle photography shot during the last light of day. Warm tones, long shadows.",
     "image": "/images/project-5.jpg",
+    "videoUrl": "",
+    "loop": false,
     "featured": false,
     "gradient": "linear-gradient(135deg, #1a0800 0%, #240e00 40%, #080600 100%)"
   },
@@ -53,6 +61,7 @@
     "description": "Dynamic highlight reel from a major live event. Fast cuts, high energy, cinematic colour grade.",
     "image": "/images/project-6.jpg",
     "videoUrl": "",
+    "loop": false,
     "featured": false,
     "gradient": "linear-gradient(135deg, #050a14 0%, #140510 40%, #080a05 100%)"
   }
