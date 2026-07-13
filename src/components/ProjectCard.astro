@@ -178,6 +178,22 @@ const loopSrc     = project.loop && project.videoUrl?.startsWith('/') ? project.
     border: 1px solid rgba(255,255,255,0.1);
   }
 
+  .card-media::after {
+    content: '© DARKSTYLEMEDIA';
+    position: absolute;
+    bottom: 0.7rem;
+    right: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.48);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+    z-index: 5;
+  }
+
   .card-info { padding: 0.9rem 0 0; }
 
   .card-cat {
