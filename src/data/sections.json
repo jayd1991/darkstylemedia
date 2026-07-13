@@ -3,6 +3,7 @@
   "featuredWork": true,
   "clients": false,
   "instagram": false,
+  "blog": true,
   "about": true,
   "contact": true
 }

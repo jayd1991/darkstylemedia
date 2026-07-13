@@ -1,0 +1,128 @@
+---
+interface Props {
+  post: {
+    id: number;
+    slug: string;
+    title: string;
+    date: string;
+    category: string;
+    excerpt: string;
+    image?: string;
+  };
+}
+
+const { post } = Astro.props;
+
+const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+---
+
+<a href={`/blog/${post.slug}`} class="blog-card">
+  <div class="card-img-wrap">
+    {post.image
+      ? <img src={post.image} alt={post.title} class="card-img" loading="lazy" />
+      : <div class="card-placeholder"></div>
+    }
+    <span class="card-cat">{post.category}</span>
+  </div>
+  <div class="card-body">
+    <time class="card-date" datetime={post.date}>{formattedDate}</time>
+    <h3 class="card-title">{post.title}</h3>
+    <p class="card-excerpt">{post.excerpt}</p>
+    <span class="card-read">Read more →</span>
+  </div>
+</a>
+
+<style>
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color 0.25s ease, transform 0.25s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .blog-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+
+  .card-img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.55s ease;
+  }
+
+  .blog-card:hover .card-img { transform: scale(1.05); }
+
+  .card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--surface-2) 0%, var(--border) 100%);
+  }
+
+  .card-cat {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.8rem;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 0.26rem 0.6rem;
+  }
+
+  .card-body {
+    padding: 1.4rem 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    flex: 1;
+  }
+
+  .card-date {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .card-excerpt {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .card-read {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.4rem;
+  }
+</style>

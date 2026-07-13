@@ -1,0 +1,59 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import blog from '../../data/blog.json';
+
+const posts = [...blog].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+---
+
+<Layout title="Blog" description="Thoughts, behind-the-scenes stories and updates from Darkstylemedia.">
+  <div class="blog-page">
+    <div class="container">
+      <header class="page-header">
+        <span class="section-label">Journal</span>
+        <h1 class="page-title">The Blog</h1>
+        <div class="divider"></div>
+        <p class="section-desc">Thoughts, techniques and stories from behind the lens.</p>
+      </header>
+
+      {posts.length === 0 ? (
+        <p class="empty">No posts yet — check back soon.</p>
+      ) : (
+        <div class="blog-grid">
+          {posts.map(post => <BlogCard post={post} />)}
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .blog-page {
+    padding-top: calc(var(--nav-height) + 4rem);
+    padding-bottom: 6rem;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .page-title {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .empty {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    padding: 4rem 0;
+    text-align: center;
+  }
+</style>

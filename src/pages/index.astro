@@ -6,6 +6,7 @@ import ClientsSection from '../components/ClientsSection.astro';
 import AboutSection from '../components/AboutSection.astro';
 import ContactSection from '../components/ContactSection.astro';
 import InstagramFeed from '../components/InstagramFeed.astro';
+import BlogSection from '../components/BlogSection.astro';
 import site from '../data/site.json';
 import sections from '../data/sections.json';
 ---
@@ -15,6 +16,7 @@ import sections from '../data/sections.json';
   {sections.featuredWork && <FeaturedWork />}
   {sections.clients      && <ClientsSection />}
   {sections.instagram    && <InstagramFeed />}
+  {sections.blog         && <BlogSection />}
   {sections.about        && <AboutSection short={true} />}
   {sections.contact      && <ContactSection compact={true} />}
 </Layout>

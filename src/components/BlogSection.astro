@@ -1,0 +1,63 @@
+---
+import BlogCard from './BlogCard.astro';
+import blog from '../data/blog.json';
+
+const posts = [...blog]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
+---
+
+{posts.length > 0 && (
+  <section class="blog-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-label">Latest Posts</span>
+          <h2 class="section-title">From the Blog</h2>
+          <div class="divider"></div>
+        </div>
+        <a href="/blog" class="btn btn-ghost hide-mobile">View All Posts</a>
+      </div>
+
+      <div class="blog-grid">
+        {posts.map(post => <BlogCard post={post} />)}
+      </div>
+
+      <div class="section-footer">
+        <a href="/blog" class="btn btn-outline">View All Posts</a>
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .blog-section {
+    padding: 6rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .section-footer {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .hide-mobile { display: none; }
+
+  @media (min-width: 600px) {
+    .hide-mobile    { display: inline-block; }
+    .section-footer { display: none; }
+  }
+</style>
