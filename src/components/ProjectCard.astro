@@ -30,6 +30,9 @@ const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
         loop
         playsinline
         poster={project.image}
+        controlsList="nodownload"
+        disablePictureInPicture
+        oncontextmenu="return false"
       >
         <source src={loopSrc} />
       </video>

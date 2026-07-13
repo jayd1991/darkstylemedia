@@ -29,11 +29,12 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
   <script>
     // Block right-click on images and videos
     document.addEventListener('contextmenu', (e) => {
-      if (e.target instanceof HTMLImageElement || e.target instanceof HTMLVideoElement) {
+      const t = e.target as Element;
+      if (t instanceof HTMLImageElement || t instanceof HTMLVideoElement || t.closest('#video-modal')) {
         e.preventDefault();
       }
     });
-    // Block keyboard shortcuts for saving (Ctrl+S, Ctrl+U, F12 dev tools shortcut)
+    // Block keyboard shortcuts for saving/viewing source
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && ['s', 'u'].includes(e.key.toLowerCase())) {
         e.preventDefault();
@@ -52,7 +53,7 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
       <div class="vm-box">
         <button class="vm-close" aria-label="Close">&times;</button>
         <div class="vm-player">
-          <video class="vm-video" controls playsinline></video>
+          <video class="vm-video" controls playsinline controlsList="nodownload" disablePictureInPicture></video>
           <span class="vm-watermark">© DARKSTYLEMEDIA</span>
         </div>
       </div>
