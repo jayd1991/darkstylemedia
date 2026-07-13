@@ -30,7 +30,7 @@ const hasCycle   = cycleImages.length > 1;
 ---
 
 <article class="card" data-category={project.category}>
-  <div class="card-media">
+  <div class="card-media" data-photos={(!isVideo && cycleImages.length > 0) ? JSON.stringify(cycleImages) : undefined}>
     <!-- Gradient shown while image loads or if no image is set -->
     <div class="card-bg" style={`background: ${project.gradient}`}></div>
 
@@ -53,10 +53,10 @@ const hasCycle   = cycleImages.length > 1;
         src={firstImage}
         alt={project.title}
         class="card-img"
-        loading="lazy"
+        loading={hasCycle ? 'eager' : 'lazy'}
         data-cycle={hasCycle ? JSON.stringify(cycleImages) : undefined}
-        onload="this.style.opacity='1'"
-        onerror="this.style.opacity='0'"
+        onload={!hasCycle ? "this.style.opacity='1'" : undefined}
+        onerror={!hasCycle ? "this.style.opacity='0'" : undefined}
       />
     ) : null}
 
@@ -68,6 +68,14 @@ const hasCycle   = cycleImages.length > 1;
             <path d="M8 5v14l11-7z"/>
           </svg>
           Watch
+        </button>
+      )}
+      {!isVideo && cycleImages.length > 0 && (
+        <button class="card-play-btn" data-photos={JSON.stringify(cycleImages)} aria-label={`View ${project.title}`}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-8.5-5.5l-2.5 3.01L7 14l-3 4h16l-5-6.5z"/>
+          </svg>
+          View
         </button>
       )}
     </div>
@@ -89,28 +97,82 @@ const hasCycle   = cycleImages.length > 1;
 </article>
 
 <script>
-  // Image cycling for photography cards with multiple images
-  document.querySelectorAll<HTMLImageElement>('img[data-cycle]').forEach(img => {
-    const srcs: string[] = JSON.parse(img.getAttribute('data-cycle')!);
+  document.querySelectorAll<HTMLImageElement>('img[data-cycle]').forEach(seed => {
+    const srcs: string[] = JSON.parse(seed.getAttribute('data-cycle')!);
+    srcs.forEach(src => { new Image().src = src; });
 
-    // Preload all images so swaps are instant
-    srcs.forEach(src => { const p = new Image(); p.src = src; });
+    let current = seed;
+    let lastSrc = seed.src;
+    let queue: string[] = [];
 
-    let idx = 0;
+    function refillQueue(): void {
+      const deck = [...srcs];
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+      if (deck.length > 1 && deck[0] === lastSrc) deck.push(deck.shift()!);
+      queue = deck;
+    }
 
-    // Stagger start time per card so they don't all transition at once
-    const delay = Math.random() * 3000;
+    function nextSrc(): string {
+      if (queue.length === 0) refillQueue();
+      return queue.shift()!;
+    }
 
-    setTimeout(() => {
-      setInterval(() => {
-        img.style.opacity = '0';
+    function crossfade(): void {
+      const next = nextSrc();
+      lastSrc = next;
+
+      const incoming = document.createElement('img');
+      incoming.className = 'card-img';
+      incoming.alt = '';
+      incoming.setAttribute('aria-hidden', 'true');
+      // Astro scoped CSS never reaches dynamically created elements, so all
+      // layout and transition properties must be applied as inline styles.
+      Object.assign(incoming.style, {
+        position: 'absolute',
+        inset: '0',
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        opacity: '0',
+        transition: 'opacity 1.4s ease-out',
+      });
+      current.after(incoming); // above current in DOM order, below .card-overlay
+
+      const doFade = () => {
+        // offsetWidth read forces a style/layout flush so the browser commits
+        // opacity:0 before we change it — this guarantees the CSS transition fires
+        void incoming.offsetWidth;
+        incoming.style.opacity = '1';
         setTimeout(() => {
-          idx = (idx + 1) % srcs.length;
-          img.src = srcs[idx];
-          img.style.opacity = '1';
-        }, 450); // slightly longer than the 0.4s CSS transition
-      }, 4000);
-    }, delay);
+          current.remove(); // fully hidden behind the now-opaque incoming image
+          current = incoming;
+          setTimeout(crossfade, 5000);
+        }, 1400);
+      };
+
+      incoming.src = next;
+      if (incoming.complete && incoming.naturalWidth > 0) {
+        doFade();
+      } else {
+        incoming.onload  = doFade;
+        incoming.onerror = () => { incoming.remove(); setTimeout(crossfade, 5000); };
+      }
+    }
+
+    function init(): void {
+      void seed.offsetWidth; // same flush for the initial fade-in
+      seed.style.opacity = '1';
+      setTimeout(crossfade, 5000);
+    }
+
+    if (seed.complete && seed.naturalWidth > 0) init();
+    else {
+      seed.onload  = init;
+      seed.onerror = () => { seed.style.opacity = '0'; };
+    }
   });
 </script>
 
@@ -124,6 +186,8 @@ const hasCycle   = cycleImages.length > 1;
     background: var(--surface);
   }
 
+  .card-media[data-photos] { cursor: pointer; }
+
   .card-bg {
     position: absolute;
     inset: 0;
@@ -136,7 +200,7 @@ const hasCycle   = cycleImages.length > 1;
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: transform 0.6s ease, opacity 0.4s;
+    transition: transform 0.6s ease, opacity 1.4s ease-out;
   }
 
   .card:hover .card-img { transform: scale(1.06); }
@@ -152,6 +216,7 @@ const hasCycle   = cycleImages.length > 1;
   .card-overlay {
     position: absolute;
     inset: 0;
+    z-index: 10;
     background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 55%, transparent 100%);
     opacity: 0;
     transition: opacity 0.35s ease;

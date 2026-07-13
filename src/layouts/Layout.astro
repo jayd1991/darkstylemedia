@@ -30,7 +30,7 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
     // Block right-click on images and videos
     document.addEventListener('contextmenu', (e) => {
       const t = e.target as Element;
-      if (t instanceof HTMLImageElement || t instanceof HTMLVideoElement || t.closest('#video-modal')) {
+      if (t instanceof HTMLImageElement || t instanceof HTMLVideoElement || t.closest('#video-modal') || t.closest('#photo-modal')) {
         e.preventDefault();
       }
     });
@@ -46,6 +46,23 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
       <slot />
     </main>
     <Footer />
+
+    <!-- Photo lightbox -->
+    <div id="photo-modal" aria-modal="true" role="dialog" aria-label="Photo viewer">
+      <div class="pm-backdrop"></div>
+      <div class="pm-box">
+        <div class="pm-topbar">
+          <span class="pm-counter"></span>
+          <button class="pm-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="pm-player">
+          <img class="pm-img" src="" alt="" draggable="false" oncontextmenu="return false" />
+          <span class="pm-watermark">© DARKSTYLEMEDIA</span>
+          <button class="pm-nav pm-prev" aria-label="Previous">&#8249;</button>
+          <button class="pm-nav pm-next" aria-label="Next">&#8250;</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Video lightbox -->
     <div id="video-modal" aria-modal="true" role="dialog" aria-label="Video player">
@@ -134,6 +151,123 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
         pointer-events: none;
         user-select: none;
       }
+
+      /* ── Photo lightbox ──────────────────────────────────────────────── */
+      #photo-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        align-items: center;
+        justify-content: center;
+      }
+      #photo-modal.open { display: flex; }
+
+      #photo-modal .pm-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        cursor: pointer;
+      }
+
+      .pm-box {
+        position: relative;
+        z-index: 1;
+        max-width: 92vw;
+        max-height: 92vh;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+
+      .pm-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0.1rem;
+      }
+
+      .pm-counter {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .pm-close {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.7);
+        font-size: 1.4rem;
+        line-height: 1;
+        width: 2.2rem;
+        height: 2.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: border-color 0.2s, color 0.2s;
+        flex-shrink: 0;
+      }
+      .pm-close:hover { border-color: #fff; color: #fff; }
+
+      .pm-player {
+        position: relative;
+        line-height: 0;
+      }
+
+      .pm-img {
+        display: block;
+        max-width: 92vw;
+        max-height: calc(92vh - 4rem);
+        width: auto;
+        height: auto;
+        background: #000;
+        outline: none;
+        transition: opacity 0.15s ease;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .pm-watermark {
+        position: absolute;
+        bottom: 0.7rem;
+        right: 0.9rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.6rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .pm-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 2.2rem;
+        line-height: 1;
+        width: 3rem;
+        height: 3rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s;
+      }
+      .pm-prev { left: 0.6rem; }
+      .pm-next { right: 0.6rem; }
+      .pm-nav:hover { background: rgba(0,0,0,0.85); color: #fff; }
+      .pm-nav.hidden { display: none; }
     </style>
 
     <script>
@@ -169,6 +303,79 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
       closeBtn.addEventListener('click', closeModal);
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
+      });
+    </script>
+
+    <script>
+      const photoModal  = document.getElementById('photo-modal')!;
+      const pmImg       = photoModal.querySelector('.pm-img') as HTMLImageElement;
+      const pmBackdrop  = photoModal.querySelector('.pm-backdrop')!;
+      const pmCloseBtn  = photoModal.querySelector('.pm-close')!;
+      const pmPrev      = photoModal.querySelector('.pm-prev') as HTMLElement;
+      const pmNext      = photoModal.querySelector('.pm-next') as HTMLElement;
+      const pmCounter   = photoModal.querySelector('.pm-counter') as HTMLElement;
+
+      let pmPhotos: string[] = [];
+      let pmIdx = 0;
+
+      function pmShow(idx: number, animate = true) {
+        pmIdx = idx;
+        if (animate) {
+          pmImg.style.opacity = '0';
+          setTimeout(() => {
+            pmImg.src = pmPhotos[pmIdx];
+            pmImg.style.opacity = '1';
+          }, 150);
+        } else {
+          pmImg.src = pmPhotos[pmIdx];
+          pmImg.style.opacity = '1';
+        }
+        pmCounter.textContent = pmPhotos.length > 1
+          ? `${pmIdx + 1} / ${pmPhotos.length}`
+          : '';
+      }
+
+      function openPhotoModal(photos: string[]) {
+        pmPhotos = photos;
+        const hasMany = photos.length > 1;
+        pmPrev.classList.toggle('hidden', !hasMany);
+        pmNext.classList.toggle('hidden', !hasMany);
+        pmShow(0, false);
+        photoModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePhotoModal() {
+        photoModal.classList.remove('open');
+        pmImg.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.addEventListener('click', (e) => {
+        const btn = (e.target as Element).closest('[data-photos]') as HTMLElement | null;
+        if (btn?.dataset.photos) {
+          e.preventDefault();
+          openPhotoModal(JSON.parse(btn.dataset.photos));
+        }
+      });
+
+      pmBackdrop.addEventListener('click', closePhotoModal);
+      pmCloseBtn.addEventListener('click', closePhotoModal);
+
+      pmPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        pmShow((pmIdx - 1 + pmPhotos.length) % pmPhotos.length);
+      });
+      pmNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        pmShow((pmIdx + 1) % pmPhotos.length);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!photoModal.classList.contains('open')) return;
+        if (e.key === 'Escape')      closePhotoModal();
+        if (e.key === 'ArrowLeft')   pmShow((pmIdx - 1 + pmPhotos.length) % pmPhotos.length);
+        if (e.key === 'ArrowRight')  pmShow((pmIdx + 1) % pmPhotos.length);
       });
     </script>
   </body>
