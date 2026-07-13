@@ -3,3 +3,6 @@ node_modules/
 .env
 .env.production
 .astro/
+
+# Video files are too large for GitHub — host externally and reference by URL
+public/videos/
