@@ -15,7 +15,7 @@ interface Props {
 
 const { project } = Astro.props;
 const isVideo     = project.category === 'videography';
-const loopSrc     = project.loop && project.videoUrl?.startsWith('/') ? project.videoUrl : null;
+const loopSrc     = project.loop && project.videoUrl ? project.videoUrl : null;
 ---
 
 <article class="card" data-category={project.category}>
