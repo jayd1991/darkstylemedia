@@ -16,7 +16,7 @@
     "description": "",
     "featured": false,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 8,
+    "id": 8.0,
     "image": "/images/tree.png",
     "images": [
       "/images/tree.png",
@@ -34,6 +34,20 @@
     ],
     "loop": false,
     "title": "Redmires",
+    "videoUrl": ""
+  },
+  {
+    "category": "photography",
+    "description": "",
+    "featured": false,
+    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
+    "id": 9,
+    "image": "/images/1.webp",
+    "images": [
+      "/images/1.webp"
+    ],
+    "loop": false,
+    "title": "POWER",
     "videoUrl": ""
   }
 ]
