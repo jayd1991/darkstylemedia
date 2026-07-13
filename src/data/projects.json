@@ -32,32 +32,19 @@
     "featured": true,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
     "id": 10.0,
-    "image": "/images/IMG_1065_edited.webp",
+    "image": "/images/IMG_1086_edited.webp",
     "images": [
-      "/images/IMG_1065_edited.webp",
-      "/images/IMG_1078_edited.webp",
-      "/images/IMG_1083_edited.webp",
-      "/images/IMG_1085_edited.webp",
-      "/images/1_3.webp",
-      "/images/IMG_1072_edited.webp",
-      "/images/IMG_1069_edited.webp"
+      "/images/IMG_1086_edited.webp",
+      "/images/IMG_1067_edited.webp",
+      "/images/IMG_1069_edited_2.webp",
+      "/images/IMG_1072_edited_2.webp",
+      "/images/IMG_1078_edited_2.webp",
+      "/images/IMG_1082_edited.webp",
+      "/images/IMG_1083_edited_2.webp",
+      "/images/IMG_1085_edited_2.webp"
     ],
     "loop": false,
     "title": "Squire's Motorbike Cafe",
-    "videoUrl": ""
-  },
-  {
-    "category": "photography",
-    "description": "Description.",
-    "featured": false,
-    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 13,
-    "image": "/images/power.webp",
-    "images": [
-      "/images/power.webp"
-    ],
-    "loop": false,
-    "title": "Power",
     "videoUrl": ""
   },
   {
@@ -83,6 +70,20 @@
     ],
     "loop": false,
     "title": "Redmires",
+    "videoUrl": ""
+  },
+  {
+    "category": "photography",
+    "description": "Description.",
+    "featured": false,
+    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
+    "id": 13,
+    "image": "/images/power.webp",
+    "images": [
+      "/images/power.webp"
+    ],
+    "loop": false,
+    "title": "Power",
     "videoUrl": ""
   },
   {
