@@ -26,6 +26,20 @@ const pageTitle = title === 'Darkstylemedia' ? title : `${title} | Darkstylemedi
     <title>{pageTitle}</title>
   </head>
   <body>
+  <script>
+    // Block right-click on images and videos
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target instanceof HTMLImageElement || e.target instanceof HTMLVideoElement) {
+        e.preventDefault();
+      }
+    });
+    // Block keyboard shortcuts for saving (Ctrl+S, Ctrl+U, F12 dev tools shortcut)
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && ['s', 'u'].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+      }
+    });
+  </script>
     <Navbar />
     <main>
       <slot />
