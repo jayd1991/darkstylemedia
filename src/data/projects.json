@@ -102,28 +102,5 @@
     "loop": false,
     "title": "Ardsley Woods, Barnsley",
     "videoUrl": ""
-  },
-  {
-    "category": "photography",
-    "description": "Description.",
-    "featured": false,
-    "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
-    "id": 14,
-    "image": "",
-    "images": [],
-    "loop": false,
-    "title": "New Project",
-    "videoUrl": ""
-  },
-  {
-    "category": "videography",
-    "description": "",
-    "featured": false,
-    "gradient": "linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%)",
-    "id": 15,
-    "image": "",
-    "loop": true,
-    "title": "Scopic Productions Behind the scenes",
-    "videoUrl": "https://pub-b9c57eba192b43de83605dcfd2b449c8.r2.dev/videos/Scopic Production Assistant 1st day.mov"
   }
 ]
