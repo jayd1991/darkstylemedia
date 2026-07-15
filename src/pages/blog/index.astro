@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import BlogCard from '../../components/BlogCard.astro';
 import blog from '../../data/blog.json';
 
 const posts = [...blog].sort(
@@ -15,14 +14,63 @@ const posts = [...blog].sort(
         <span class="section-label">Journal</span>
         <h1 class="page-title">The Blog</h1>
         <div class="divider"></div>
-        <p class="section-desc">Thoughts, techniques and stories from behind the lens.</p>
       </header>
 
       {posts.length === 0 ? (
         <p class="empty">No posts yet — check back soon.</p>
       ) : (
-        <div class="blog-grid">
-          {posts.map(post => <BlogCard post={post} />)}
+        <div class="feed">
+          {posts.map((post, i) => {
+            const images: string[] = (post as any).images?.length
+              ? (post as any).images
+              : post.image ? [post.image] : [];
+            const videoUrl: string = (post as any).videoUrl ?? '';
+            const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
+              day: 'numeric', month: 'long', year: 'numeric',
+            });
+            return (
+              <article class={`post${i < posts.length - 1 ? ' post--sep' : ''}`}>
+                <header class="post-header">
+                  <div class="post-meta">
+                    <time class="post-date" datetime={post.date}>{formattedDate}</time>
+                    {post.category && <span class="post-cat">{post.category}</span>}
+                  </div>
+                  <h3 class="post-title">{post.title}</h3>
+                </header>
+
+                {images.length > 0 && (
+                  <div class={`post-images post-images--${images.length === 1 ? 'single' : images.length === 2 ? 'two' : 'grid'}`}>
+                    {images.map(src => (
+                      <img src={src} alt="" class="post-img" loading="lazy" draggable="false" oncontextmenu="return false" />
+                    ))}
+                  </div>
+                )}
+
+                {videoUrl && (
+                  <div class="post-video-wrap">
+                    <video
+                      class="post-video"
+                      controls
+                      playsinline
+                      controlsList="nodownload"
+                      disablePictureInPicture
+                      preload="metadata"
+                    >
+                      <source src={videoUrl} />
+                    </video>
+                  </div>
+                )}
+
+                {post.body && (
+                  <div class="post-body">
+                    {post.body.split('\n').filter((l: string) => l.trim() !== '').map((para: string) => (
+                      <p>{para}</p>
+                    ))}
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       )}
     </div>
@@ -32,7 +80,7 @@ const posts = [...blog].sort(
 <style>
   .blog-page {
     padding-top: calc(var(--nav-height) + 4rem);
-    padding-bottom: 6rem;
+    padding-bottom: 7rem;
     min-height: 100vh;
   }
 
@@ -41,19 +89,126 @@ const posts = [...blog].sort(
   }
 
   .page-title {
-    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    margin: 0.5rem 0 0.75rem;
   }
 
-  .blog-grid {
+  .feed {
+    display: flex;
+    flex-direction: column;
+    max-width: 720px;
+  }
+
+  .post {
+    padding-bottom: 3.5rem;
+  }
+
+  .post--sep {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3.5rem;
+  }
+
+  .post-header {
+    margin-bottom: 1.6rem;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .post-date {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .post-cat {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 0.2rem 0.55rem;
+  }
+
+  .post-title {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    color: var(--text);
+    line-height: 1.05;
+  }
+
+  .post-images {
+    margin-bottom: 1.6rem;
+  }
+
+  .post-images--single .post-img {
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-images--two {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .post-images--two .post-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-images--grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .post-images--grid .post-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-video-wrap {
+    margin-bottom: 1.6rem;
+  }
+
+  .post-video {
+    width: 100%;
+    max-height: 480px;
+    display: block;
+    background: #000;
+    outline: none;
+  }
+
+  .post-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .post-body p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.75;
   }
 
   .empty {
     color: var(--text-muted);
     font-size: 0.95rem;
     padding: 4rem 0;
-    text-align: center;
   }
 </style>

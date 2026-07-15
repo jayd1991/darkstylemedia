@@ -1,30 +1,72 @@
 ---
-import BlogCard from './BlogCard.astro';
 import blog from '../data/blog.json';
 
-const posts = [...blog]
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 3);
+const posts = [...blog].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
 ---
 
 {posts.length > 0 && (
   <section class="blog-section">
     <div class="container">
       <div class="section-header">
-        <div>
-          <span class="section-label">Latest Posts</span>
-          <h2 class="section-title">From the Blog</h2>
-          <div class="divider"></div>
-        </div>
-        <a href="/blog" class="btn btn-ghost hide-mobile">View All Posts</a>
+        <span class="section-label">Latest Posts</span>
+        <h2 class="section-title">From the Blog</h2>
+        <div class="divider"></div>
       </div>
 
-      <div class="blog-grid">
-        {posts.map(post => <BlogCard post={post} />)}
-      </div>
+      <div class="feed">
+        {posts.map((post, i) => {
+          const images: string[] = (post as any).images?.length
+            ? (post as any).images
+            : post.image ? [post.image] : [];
+          const videoUrl: string = (post as any).videoUrl ?? '';
+          const formattedDate = new Date(post.date).toLocaleDateString('en-GB', {
+            day: 'numeric', month: 'long', year: 'numeric',
+          });
+          return (
+            <article class={`post${i < posts.length - 1 ? ' post--sep' : ''}`}>
+              <header class="post-header">
+                <div class="post-meta">
+                  <time class="post-date" datetime={post.date}>{formattedDate}</time>
+                  {post.category && <span class="post-cat">{post.category}</span>}
+                </div>
+                <h3 class="post-title">{post.title}</h3>
+              </header>
 
-      <div class="section-footer">
-        <a href="/blog" class="btn btn-outline">View All Posts</a>
+              {images.length > 0 && (
+                <div class={`post-images post-images--${images.length === 1 ? 'single' : images.length === 2 ? 'two' : 'grid'}`}>
+                  {images.map(src => (
+                    <img src={src} alt="" class="post-img" loading="lazy" draggable="false" oncontextmenu="return false" />
+                  ))}
+                </div>
+              )}
+
+              {videoUrl && (
+                <div class="post-video-wrap">
+                  <video
+                    class="post-video"
+                    controls
+                    playsinline
+                    controlsList="nodownload"
+                    disablePictureInPicture
+                    preload="metadata"
+                  >
+                    <source src={videoUrl} />
+                  </video>
+                </div>
+              )}
+
+              {post.body && (
+                <div class="post-body">
+                  {post.body.split('\n').filter((l: string) => l.trim() !== '').map((para: string) => (
+                    <p>{para}</p>
+                  ))}
+                </div>
+              )}
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -37,27 +79,122 @@ const posts = [...blog]
   }
 
   .section-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .feed {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 3rem;
+    flex-direction: column;
+    max-width: 720px;
   }
 
-  .blog-grid {
+  .post {
+    padding-bottom: 3.5rem;
+  }
+
+  .post--sep {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3.5rem;
+  }
+
+  .post-header {
+    margin-bottom: 1.6rem;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .post-date {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .post-cat {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 0.2rem 0.55rem;
+  }
+
+  .post-title {
+    font-family: 'Bebas Neue', Arial, sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.04em;
+    color: var(--text);
+    line-height: 1.05;
+  }
+
+  /* ── Images ── */
+  .post-images {
+    margin-bottom: 1.6rem;
+  }
+
+  .post-images--single .post-img {
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-images--two {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
   }
 
-  .section-footer {
-    margin-top: 3rem;
-    text-align: center;
+  .post-images--two .post-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
   }
 
-  .hide-mobile { display: none; }
+  .post-images--grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
 
-  @media (min-width: 600px) {
-    .hide-mobile    { display: inline-block; }
-    .section-footer { display: none; }
+  .post-images--grid .post-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Video ── */
+  .post-video-wrap {
+    margin-bottom: 1.6rem;
+  }
+
+  .post-video {
+    width: 100%;
+    max-height: 480px;
+    display: block;
+    background: #000;
+    outline: none;
+  }
+
+  /* ── Body ── */
+  .post-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .post-body p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.75;
   }
 </style>
