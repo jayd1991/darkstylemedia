@@ -37,16 +37,16 @@ const hasCycle   = cycleImages.length > 1;
     {loopSrc ? (
       <video
         class="card-video"
-        autoplay
         muted
         loop
         playsinline
+        preload="none"
         poster={project.image || undefined}
         controlsList="nodownload"
         disablePictureInPicture
         oncontextmenu="return false"
+        data-src={loopSrc}
       >
-        <source src={loopSrc} />
       </video>
     ) : firstImage ? (
       <img
@@ -97,6 +97,25 @@ const hasCycle   = cycleImages.length > 1;
 </article>
 
 <script>
+  // Load and play looping card videos only when scrolled into view
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const vid = entry.target as HTMLVideoElement;
+      if (entry.isIntersecting) {
+        if (!vid.src && vid.dataset.src) {
+          vid.src = vid.dataset.src;
+        }
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  document.querySelectorAll<HTMLVideoElement>('video[data-src]').forEach(vid => {
+    videoObserver.observe(vid);
+  });
+
   document.querySelectorAll<HTMLImageElement>('img[data-cycle]').forEach(seed => {
     const srcs: string[] = JSON.parse(seed.getAttribute('data-cycle')!);
     srcs.forEach(src => { new Image().src = src; });
