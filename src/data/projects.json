@@ -29,7 +29,7 @@
   {
     "category": "photography",
     "description": "",
-    "featured": true,
+    "featured": false,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
     "id": 10.0,
     "image": "/images/IMG_1086_edited.webp",
@@ -118,7 +118,7 @@
   {
     "category": "photography",
     "description": "",
-    "featured": false,
+    "featured": true,
     "gradient": "linear-gradient(135deg,#0a0a0a,#1a0a0a)",
     "id": 16,
     "image": "/images/IMG_1326_edited.webp",
