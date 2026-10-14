@@ -53,7 +53,7 @@ const hasCycle   = cycleImages.length > 1;
         src={firstImage}
         alt={project.title}
         class="card-img"
-        loading={hasCycle ? 'eager' : 'lazy'}
+        loading="lazy"
         data-cycle={hasCycle ? JSON.stringify(cycleImages) : undefined}
         onload={!hasCycle ? "this.style.opacity='1'" : undefined}
         onerror={!hasCycle ? "this.style.opacity='0'" : undefined}
@@ -118,11 +118,15 @@ const hasCycle   = cycleImages.length > 1;
 
   document.querySelectorAll<HTMLImageElement>('img[data-cycle]').forEach(seed => {
     const srcs: string[] = JSON.parse(seed.getAttribute('data-cycle')!);
-    srcs.forEach(src => { new Image().src = src; });
 
     let current = seed;
     let lastSrc = seed.src;
     let queue: string[] = [];
+    // Only the next photo is downloaded ahead of time (not the whole set), and
+    // the slideshow only runs while the card is on screen.
+    let upcoming: string | null = null;
+    let visible = false;
+    let waiting = false; // a crossfade is due but the card is off screen
 
     function refillQueue(): void {
       const deck = [...srcs];
@@ -139,8 +143,21 @@ const hasCycle   = cycleImages.length > 1;
       return queue.shift()!;
     }
 
+    function preloadNext(): void {
+      upcoming = nextSrc();
+      new Image().src = upcoming;
+    }
+
+    function scheduleNext(): void {
+      setTimeout(() => {
+        if (visible) crossfade();
+        else waiting = true;
+      }, 5000);
+    }
+
     function crossfade(): void {
-      const next = nextSrc();
+      const next = upcoming ?? nextSrc();
+      upcoming = null;
       lastSrc = next;
 
       const incoming = document.createElement('img');
@@ -168,7 +185,8 @@ const hasCycle   = cycleImages.length > 1;
         setTimeout(() => {
           current.remove(); // fully hidden behind the now-opaque incoming image
           current = incoming;
-          setTimeout(crossfade, 5000);
+          preloadNext();
+          scheduleNext();
         }, 1400);
       };
 
@@ -177,15 +195,21 @@ const hasCycle   = cycleImages.length > 1;
         doFade();
       } else {
         incoming.onload  = doFade;
-        incoming.onerror = () => { incoming.remove(); setTimeout(crossfade, 5000); };
+        incoming.onerror = () => { incoming.remove(); scheduleNext(); };
       }
     }
 
     function init(): void {
       void seed.offsetWidth; // same flush for the initial fade-in
       seed.style.opacity = '1';
-      setTimeout(crossfade, 5000);
+      preloadNext();
+      scheduleNext();
     }
+
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible && waiting) { waiting = false; crossfade(); }
+    }, { rootMargin: '200px' }).observe(seed.parentElement!);
 
     if (seed.complete && seed.naturalWidth > 0) init();
     else {
